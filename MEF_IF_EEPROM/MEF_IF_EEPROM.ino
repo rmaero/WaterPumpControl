@@ -20,6 +20,7 @@ Rodrigo Maero 2023
 
 /*************************DEFAULT TIME*****************************************/
 #define TIEMPO_MAX_ON_MILLIS 180000 //3 min *60 seg * 1000 ms = 180.000 millis
+#define ONE_MIN_TO_MILLIS 60000  // *60 seg * 1000 ms
 #define MIN_TO_MILLIS 60000 // *60 seg * 1000 ms
 
 /******************************************************************************
@@ -68,8 +69,6 @@ void turnRelayOn(bool t)
   digitalWrite(PIN_BOMBA,t);
 //debug led  
   digitalWrite(PIN_LED_INTERNAL,t);
-Serial.print("Bomba:");
-Serial.println(t);
 }
 
 
@@ -83,13 +82,12 @@ void blinkErrorLed()
     {
       ledTimer=1;
       ledState=  !ledState;
+        //DEBUG 
+        // digitalWrite(PIN_LED_INTERNAL,ledState);
+        Serial.print("Error Led:");
+        Serial.println(ledState);
     }
-  digitalWrite(PIN_LED_ERROR,ledState);
-
-  //DEBUG 
-  // digitalWrite(PIN_LED_INTERNAL,ledState);
-  Serial.print("Error Led:");
-  Serial.println(ledState);
+  digitalWrite(PIN_LED_ERROR,ledState);  
 }
 
 
@@ -101,46 +99,52 @@ States relayStateMachine;
 
 void stateMachine()
 {
-  Serial.print("Estado:");
-  Serial.println(relayStateMachine);
 //SWITCH-CASE ANDA MAL EN ARDUINO, REEMPLAZO POR IF
   if(relayStateMachine==WAITING)
   {
       if( isCisternaFull()  &&  !isTanqueFull())
-      {
+      {        
         relayStateMachine = PUMP_ON;          
         startPumpTime=millis();        
         turnRelayOn(true);        
+          //DEBUG
+          Serial.print("Estado:");
+          Serial.println(relayStateMachine);
+          Serial.println("ENCIENDO BOMBA");
       } 
   }else if(relayStateMachine==LEARNING)
   {
-      Serial.println("LEARNING");
+      //Serial.println("LEARNING");
       turnRelayOn(true);
       if(!isCisternaFull()  ||  isTanqueFull())
       {
+        Serial.println("Terminado ciclo learning");
         turnRelayOn(false);
-        maxTimeOn=millis()-startLearningTime;
+        maxTimeOn=millis()-startLearningTime + ONE_MIN_TO_MILLIS;//maxTimeOn = tiempo medido + 1 min
         Serial.print("TIEMPO MAX PRENDIDO:");        
         Serial.println(maxTimeOn);
         /*********SAVE TO EEPROM*****************************************************/
         Flash saveToEEPROM;
         saveToEEPROM.flag='S';
         saveToEEPROM.maxTimeMillis=maxTimeOn;
+        
         EEPROM.put(EEPROM_ADDRESS,saveToEEPROM);
+        EEPROM.get(EEPROM_ADDRESS,saveToEEPROM);
         
         Serial.print("Tiempo max guardado en EEPROM:");        
-        EEPROM.get(EEPROM_ADDRESS,saveToEEPROM);
         Serial.println(saveToEEPROM.maxTimeMillis);
-        Serial.print("Guardado:");
+        Serial.print("Guardado (S= SAVED, N=NOT saved):");
         Serial.println(saveToEEPROM.flag);
         /**************************************************************************/
         relayStateMachine = WAITING;
+        Serial.println("Estado: WAITING");
       }
   }else if(relayStateMachine == PUMP_ON)
   { 
       turnRelayOn(true);
       if( !isCisternaFull()  || isTanqueFull()  )
       {
+        Serial.println("Bomba apagada\nEstado: WAITING");
         turnRelayOn(false);
         relayStateMachine = WAITING;
       }
@@ -155,14 +159,13 @@ void stateMachine()
         Serial.print("Pasaron:"); 
         Serial.print(elapsedTime);                 
         Serial.println("ms"); 
-        Serial.println("paso estado a ERROR"); 
+        Serial.println("Bomba apagada\nEstado: ERROR");
         relayStateMachine = SM_ERROR;   
         ledTimer=1;      
         turnRelayOn(false);
       }
   }else if(relayStateMachine==SM_ERROR)
   {   
-      Serial.println("ERROR"); 
       blinkErrorLed();
   }else{
       relayStateMachine=WAITING;
@@ -174,11 +177,13 @@ void stateMachine()
 --------------------------------INIT---------------------------------------
 ***************************************************************************/
 void setup() {
-
+  Serial.begin(9600);
+   while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
 //debug 
   pinMode(PIN_LED_INTERNAL, OUTPUT);
-  Serial.begin(9600);
-  
+    
 // BOTON LEARN
   pinMode(PIN_LEARN, INPUT_PULLUP);
   
@@ -207,17 +212,24 @@ void setup() {
     relayStateMachine=WAITING;
     Flash readFromEEPROM;
     EEPROM.get(EEPROM_ADDRESS,readFromEEPROM);
+    
+    Serial.print("Tiempo max guardado en EEPROM:");
+    Serial.println(readFromEEPROM.maxTimeMillis);
+    Serial.print("Guardado (S= SAVED, N=NOT saved):");
+    Serial.println(readFromEEPROM.flag);
+
     if(readFromEEPROM.flag=='S')
     {
       maxTimeOn = readFromEEPROM.maxTimeMillis;
       Serial.print("Tomo tiempo guardado en EEPROM (ms):");
       Serial.println(maxTimeOn);
     }else{
-      Serial.println("Tomo tiempo default");
       maxTimeOn = TIEMPO_MAX_ON_MILLIS; 
+      Serial.print("Tomo tiempo default:");
+      Serial.println(maxTimeOn);
+      Serial.println("Estado: WAITING");
     }
   }
-  
   ledTimer=1;
   ledState=0;
   longLoopTime =millis();  
