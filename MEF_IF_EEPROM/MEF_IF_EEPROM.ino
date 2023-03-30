@@ -1,22 +1,41 @@
+/*---------------------------------------------------------------------------------
+Rodrigo Maero 2023
+
+
+---------------------------------------------------------------------------------*/
+
+
 #include <EEPROM.h>
 
-#define EEPROM_FLAG_ADDRESS 0
-#define EEPROM_TIME_ADDRESS 1
+/*********************************************************************************
+****************************PINS*************************************************/
 
 #define PIN_LEARN 6
 #define PIN_CISTERNA 5
 #define PIN_TANQUE 4
 #define PIN_BOMBA 3
 #define PIN_LED_ERROR 2
-#define AUX1 7
-#define AUX2 8
+#define PIN_AUX1 7
+#define PIN_AUX2 8
+
+/*************************DEFAULT TIME*****************************************/
 #define TIEMPO_MAX_ON_MILLIS 180000 //3 min *60 seg * 1000 ms = 180.000 millis
 #define MIN_TO_MILLIS 60000 // *60 seg * 1000 ms
 
-//debug
+/******************************************************************************
+*****************************EEPROM*******************************************/
+#define EEPROM_ADDRESS 0
+
+struct Flash {
+  char flag;
+  uint32_t maxTimeMillis;
+};
+
+/************************************DEBUG**********************************/
 #define PIN_LED_INTERNAL 13
 bool ledState;
 
+/***************************************************************************/
 uint32_t maxTimeOn;
 uint32_t startLearningTime;
 uint32_t startPumpTime;
@@ -71,14 +90,12 @@ void blinkErrorLed()
   // digitalWrite(PIN_LED_INTERNAL,ledState);
   Serial.print("Error Led:");
   Serial.println(ledState);
-
 }
 
 
 /**************************************************************************
 ----------------MAIN STATE MACHINE-----------------------------------------
 ***************************************************************************/
-
 typedef enum States {WAITING, LEARNING, PUMP_ON, SM_ERROR};
 States relayStateMachine;
 
@@ -105,12 +122,18 @@ void stateMachine()
         maxTimeOn=millis()-startLearningTime;
         Serial.print("TIEMPO MAX PRENDIDO:");        
         Serial.println(maxTimeOn);
-        /*********EEPROM*****************************************************/
-        EEPROM.update(EEPROM_FLAG_ADDRESS,1);
-        EEPROM.update(EEPROM_TIME_ADDRESS,maxTimeOn/MIN_TO_MILLIS);
+        /*********SAVE TO EEPROM*****************************************************/
+        Flash saveToEEPROM;
+        saveToEEPROM.flag='S';
+        saveToEEPROM.maxTimeMillis=maxTimeOn;
+        EEPROM.put(EEPROM_ADDRESS,saveToEEPROM);
+        
         Serial.print("Tiempo max guardado en EEPROM:");        
-        Serial.println(EEPROM.read(EEPROM_TIME_ADDRESS));
-        /*********EEPROM*****************************************************/
+        EEPROM.get(EEPROM_ADDRESS,saveToEEPROM);
+        Serial.println(saveToEEPROM.maxTimeMillis);
+        Serial.print("Guardado:");
+        Serial.println(saveToEEPROM.flag);
+        /**************************************************************************/
         relayStateMachine = WAITING;
       }
   }else if(relayStateMachine == PUMP_ON)
@@ -177,14 +200,16 @@ void setup() {
       if( !isTanqueFull() && isCisternaFull()){ //si esta en el estado correcto (cist llena, tanque vacio)
         relayStateMachine=LEARNING;
       }else{
-        relayStateMachine=ERROR;
+        relayStateMachine=SM_ERROR;
       }
     }
   }else{
     relayStateMachine=WAITING;
-    if(EEPROM.read(EEPROM_FLAG_ADDRESS))
+    Flash readFromEEPROM;
+    EEPROM.get(EEPROM_ADDRESS,readFromEEPROM);
+    if(readFromEEPROM.flag=='S')
     {
-      maxTimeOn = EEPROM.read(EEPROM_TIME_ADDRESS) * MIN_TO_MILLIS ;
+      maxTimeOn = readFromEEPROM.maxTimeMillis;
       Serial.print("Tomo tiempo guardado en EEPROM (ms):");
       Serial.println(maxTimeOn);
     }else{
@@ -203,8 +228,8 @@ void setup() {
 --------------------------------MAIN LOOP----------------------------------
 ***************************************************************************/
 void loop() {
-  currentTime = millis();  
   stateMachine();
+  currentTime = millis();  
   /*every 50ms
   if( (currentTime-shortLoopTime) >=50 )
   {
