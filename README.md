@@ -35,25 +35,6 @@ Detección de cisterna vacía
 Timeout de seguridad
 
 Funcionamiento
-┌─────────────┐         ┌──────────────┐
-│   Tanque    │         │   Cisterna   │
-│  Elevado    │         │              │
-│             │         │    ┌───┐     │
-│ [Sensor]━━━━┿━━━━━━━━━┿━━━━│ ● │     │
-└──────┬──────┘         │    └─┬─┘     │
-       │                │   [Sensor]   │
-       │                └──────┬───────┘
-       │                       │
-       └───────────┬───────────┘
-                   │
-            ┌──────▼──────┐
-            │ Controller  │
-            │   (PCB)     │
-            └──────┬──────┘
-                   │
-              ┌────▼────┐
-              │  Bomba  │
-              └─────────┘
 Lógica básica:
 
 Sensor detecta nivel bajo en tanque y nivel alto en cisterna → activa bomba
