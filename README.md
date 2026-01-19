@@ -1,11 +1,13 @@
 Water Pump Controller
-Sistema de control automático para bombas de agua en instalaciones residenciales con cisterna y tanque elevado. Diseñado para optimizar el consumo energético y prevenir funcionamiento en seco de la bomba.
+Sistema de control automático para bombas de agua en instalaciones residenciales con cisterna y tanque elevado. Diseñado para optimizar el consumo energético y prevenir funcionamiento en seco de la bomba. La version mas actual es "MEF_IF_EEPROM".
 
-TODO FALTA IMAGEN
+[PCB_finished](https://github.com/user-attachments/assets/e71ccc1b-bbbf-4ea1-8a62-451e9861eb20)
+
 Sistema en producción implementado desde 2023
 
 Estado: En Producción
 Operando continuamente desde 2023 sin fallas en instalación residencial real.
+REV. B: corregido invertidos pines Rx y Tx, resistencia pulldown de Q1. Agregado conector J10 para programar bootloader (no implementado todavia).
 
 Problema que Resuelve
 En sistemas tradicionales de cisterna + tanque elevado, las bombas funcionan con controles manuales, niveles flotantes o temporizadores simples, lo que genera:
