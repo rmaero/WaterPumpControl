@@ -1,0 +1,42 @@
+Designator,Val,Package,Mid X,Mid Y,Rotation,Layer
+C1,10uF 16V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,42.5,-32.0,180.0,top
+C2,10uF 16V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,48.786102,-31.95389,180.0,top
+C3,0.1uF 6.3V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,48.815561,-33.95389,180.0,top
+C4,0.1uF 6.3V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,69.472282,-35.371535,180.0,top
+C5,0.1uF 6.3V,C_0603_1608Metric_Pad1.08x0.95mm_HandSolder,69.5,-29.0,180.0,top
+D1,LED Green 0603,LED_0603_1608Metric,90.5,-26.5,180.0,top
+D2,LED Red 0603,LED_0603_1608Metric,90.465451,-34.502571,180.0,top
+D3,LED Green 0603,LED_0603_1608Metric,90.4,-44.9,180.0,top
+D4,LED Red 0603,LED_0603_1608Metric,90.3,-53.0,180.0,top
+D5,LED Red 0603,LED_0603_1608Metric,47.0,-67.9,180.0,top
+D6,DIODE SS54,D_1206_3216Metric,70.55,-86.92,90.0,top
+D7,LED Yellow,LED_0603_1608Metric,69.5,-37.8,180.0,top
+J1,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,26.0,-55.96,90.0,top
+J2,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,26.0,-72.96,90.0,top
+J3,Barrel_Jack_Switch,BarrelJack_Kycon_KLDX-0202-xC_Horizontal,34.35,-33.9,0.0,top
+J4,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,106.55,-96.085664,90.0,top
+J5,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,106.55,-34.0,90.0,top
+J6,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,106.55,-53.01,90.0,top
+J7,Conn_01x06_Male,PinSocket_1x06_P2.54mm_Vertical,56.0,-25.0,90.0,top
+J8,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,106.55,-79.04,90.0,top
+J9,Screw_Terminal_01x03,TerminalBlock_bornier-3_P5.08mm,26.0,-89.16,90.0,top
+K1,12VDC SPDT RELAY SRU-12VDC-SL-C,Relay_SPDT_Finder_36.11,77.5,-90.5,0.0,top
+Q1,2N7002H,SOT-23,64.9,-88.2,180.0,top
+R1,1k,R_0603_1608Metric,59.896323,-87.25482,0.0,top
+R2,470,R_0603_1608Metric,90.5,-24.5,180.0,top
+R3,470,R_0603_1608Metric,90.5,-32.0,180.0,top
+R4,470,R_0603_1608Metric,90.4,-42.5,180.0,top
+R5,470,R_0603_1608Metric,90.3,-50.5,180.0,top
+R6,330,R_0603_1608Metric,42.0,-67.88,0.0,top
+R7,1.5M,R_0603_1608Metric,90.490558,-29.0,180.0,top
+R8,1M,R_0603_1608Metric,83.5,-29.0,180.0,top
+R9,1.5M,R_0603_1608Metric,90.3,-48.0,180.0,top
+R10,1M,R_0603_1608Metric,85.0,-48.0,180.0,top
+R11,330,R_0603_1608Metric,69.5,-41.0,180.0,top
+R12,10k,R_0603_1608Metric,38.64087,-43.250933,0.0,top
+R13,10k,R_0603_1608Metric,59.898715,-89.158455,180.0,top
+SW1,SW_SPST,SW_SPST_B3S-1000,47.0,-45.5,90.0,top
+SW2,SW_SPST,SW_SPST_B3S-1000,47.0,-56.0,90.0,top
+U1,AP1117-50,SOT-223-3_TabPin2,46.5,-26.5,180.0,top
+U2,ATmega328P-A,TQFP-32_7x7mm_P0.8mm,60.5,-35.0,270.0,top
+Y1,Crystal_GND2,Resonator_SMD_Murata_CSTxExxV-3Pin_3.0x1.1mm_HandSoldering,49.5,-38.2,90.0,top
