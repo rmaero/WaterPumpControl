@@ -63,6 +63,8 @@ PCB Diseñado
 
 Instalación Real
 TODO FOTO
+![IMG_1010](https://github.com/user-attachments/assets/6b4fe1f5-71a2-4769-8080-581e868ae00e)
+
 
 Requisitos de Hardware
 
