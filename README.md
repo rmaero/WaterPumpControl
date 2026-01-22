@@ -1,5 +1,5 @@
 Water Pump Controller
-Sistema de control automático para bombas de agua en instalaciones residenciales con cisterna y tanque elevado. Diseñado para optimizar el consumo energético y prevenir funcionamiento en seco de la bomba. La version mas actual es "MEF_IF_EEPROM".
+Sistema de control automático para bombas de agua en instalaciones residenciales con cisterna y tanque elevado. Diseñado para optimizar el consumo energético y prevenir funcionamiento en seco de la bomba. La version mas actual del firmware es "MEF_IF_EEPROM".
 
 ![photo_2026-01-19 16 11 02](https://github.com/user-attachments/assets/e71ccc1b-bbbf-4ea1-8a62-451e9861eb20)
 
